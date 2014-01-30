@@ -1,0 +1,3 @@
+#!/bin/bash
+
+ip route | sed -n -e 's/^default.*dev \([^ ]*\).* metric \([^ ]*\).*/\2 \1/p' | sort -n | cut -f2 -d' ' | head -n 1

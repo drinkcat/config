@@ -1,0 +1,6 @@
+#!/bin/bash
+
+INT="`/home/nicolas/bin/get-int`"
+
+[ "$INT" != "$1" ] && echo -n Nope
+

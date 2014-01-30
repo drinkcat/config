@@ -1,0 +1,17 @@
+#!/bin/sh
+
+if [ "$1" = "energy" ]; then
+    NOW="`cat /sys/class/power_supply/BAT1/energy_now`"
+    NOW=$((NOW/1000))
+    echo ${NOW}mAh
+elif [ "$1" = "power" ]; then
+    CURRENT="`cat /sys/class/power_supply/BAT1/power_now 2>/dev/null`"
+    CURRENT=$((CURRENT/1000))
+    echo ${CURRENT}mA
+elif [ "$1" = "voltage" ]; then
+    VOLT="`cat /sys/class/power_supply/BAT1/voltage_now`"
+    VOLT=$((VOLT/1000))
+    echo ${VOLT}mV
+else
+    echo Invalid parameter
+fi

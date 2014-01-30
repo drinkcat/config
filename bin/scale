@@ -1,0 +1,20 @@
+#!/bin/bash
+
+next="$1"
+
+if [ -z "$1" ]; then
+   if xrandr | grep eDP1 | grep 3200x1800; then
+      next="low"
+   else
+      next="high"
+   fi
+fi
+
+if [ "$next" == "low" ]; then
+   xrandr --output eDP1 --mode 1600x900_60.00
+   xrandr --dpi 96
+else
+   xrandr --output eDP1 --mode 3200x1800
+   xrandr --dpi 235
+fi
+

@@ -1,0 +1,8 @@
+cp -a ~/.i3* .
+cp -a ~/.xinitrc .
+cp -a ~/.Xresources .
+cp -a ~/.gtkrc-2.0 .
+cp -a ~/.conky* .
+cp -a ~/.emacs* .
+mkdir -p darktable-styles
+cp -a ~/.config/darktable/styles/* darktable-styles

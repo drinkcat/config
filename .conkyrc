@@ -1,0 +1,22 @@
+background no
+use_xft yes
+xftfont DejaVu Sans Mono:size=6
+
+update_interval 2.5
+total_run_times 0
+# the next two lines are very important, without them i3 won't give space for conky
+own_window yes
+own_window_type dock
+own_window_transparent no
+double_buffer yes
+# I use the next two lines to make the conky line a
+# thin as possible to waste as little space as possible
+border_inner_margin 0
+border_outer_margin 0
+#use_spacer left
+minimum_size 3000 62
+maximum_width 2000
+border_width 0
+TEXT
+${voffset 0}${goto 207}${cpugraph cpu1 50,100 78af78 a3a3a3}${goto 307}${cpugraph cpu2 50,100 78af78 a3a3a3}${goto 407}${cpugraph cpu3 50,100 78af78 a3a3a3}${goto 507}${cpugraph cpu4 50,100 78af78 a3a3a3}${goto 607}${cpugraph cpu5 50,100 78af78 a3a3a3}${goto 707}${cpugraph cpu6 50,100 78af78 a3a3a3}${goto 807}${cpugraph cpu7 50,100 78af78 a3a3a3}${goto 907}${cpugraph cpu8 50,100 78af78 a3a3a3}${goto 1075}${voffset 10}${voffset 0}${color #ffcb48}${membar 15,100}$color${voffset -10}${goto 1075}${voffset 39}${color #d00000}${swapbar 15,100}$color${voffset -39}${goto 1185}${if_empty ${exec ~/.conky/net wlp6s0 }}${goto 1262}${color #98c2c7}${downspeedgraph wlp6s0 50,120 60af60 606060}$color${goto 1382}${color #98c2c7}${upspeedgraph wlp6s0 50,120 60af60 606060}$color${goto 1485}${endif}${goto 1185}${if_empty ${exec ~/.conky/net enp0 }}${goto 1262}${color #98c2c7}${downspeedgraph enp0 50,120 60af60 606060}$color${goto 1382}${color #98c2c7}${upspeedgraph enp0 50,120 60af60 606060}$color${goto 1485}${endif}${voffset 10}${goto 0}${color #ffcb48}$nodename$color ${color #98c2c7}$sysname$color${goto 210}${cpu cpu1}%${goto 310}${cpu cpu2}%${goto 410}${cpu cpu3}%${goto 510}${cpu cpu4}%${goto 610}${cpu cpu5}%${goto 710}${cpu cpu6}%${goto 810}${cpu cpu7}%${goto 910}${cpu cpu8}%${goto 1020}${color #ffcb48}RAM$color${goto 1185}${if_empty ${exec ~/.conky/net wlp6s0 }}${color #ffcb48}wlp6s0$color${goto 1265}${color #ffffff}${totaldown wlp6s0}$color${goto 1365}${color #98c2c7}D$color${goto 1385}${color #ffffff}${totalup wlp6s0}$color${goto 1485}${color #98c2c7}U$color${endif}${goto 1185}${if_empty ${exec ~/.conky/net enp0 }}${color #ffcb48}enp0$color${goto 1265}${color #ffffff}${totaldown enp0}$color${goto 1365}${color #98c2c7}D$color${goto 1385}${color #ffffff}${totalup enp0}$color${goto 1485}${color #98c2c7}U$color${endif}${goto 1515}${color #98c2c7}Vol: ${execpi 2 ~/bin/snd status }$color${goto 1625}${color #ffcb48}${execpi 2 ~/.conky/bat energy }$color${goto 1725}${color #98c2c7}${execpi 2 ~/.conky/bat voltage }$color${goto 1000} 
+${voffset -50}${goto 0}${color #98c2c7}$kernel$color${goto 210}${freq_g 1}${goto 310}${freq_g 2}${goto 410}${freq_g 3}${goto 510}${freq_g 4}${goto 610}${freq_g 5}${goto 710}${freq_g 6}${goto 810}${freq_g 7}${goto 910}${freq_g 8}${goto 1020}${color #d00000}Swap$color${goto 1185}${if_empty ${exec ~/.conky/net wlp6s0 }}${goto 1265}${color #ffffff}${downspeed wlp6s0}$color${goto 1385}${color #ffffff}${upspeed wlp6s0}$color${goto 1485}${endif}${goto 1185}${if_empty ${exec ~/.conky/net enp0 }}${goto 1265}${color #ffffff}${downspeed enp0}$color${goto 1385}${color #ffffff}${upspeed enp0}$color${goto 1485}${endif}${goto 1515}${execpi 2 xkb-switch }${goto 1725}${color #98c2c7}${execpi 2 ~/.conky/bat power }$color${goto 1000} 

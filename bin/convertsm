@@ -1,0 +1,91 @@
+#!/usr/bin/ruby
+
+require 'RMagick'
+require 'fileutils'
+require 'thread'
+
+maxdim = 2048
+mindimother = 1150
+
+maxdimfb = 960
+
+if (!File.exists?("sm")) then
+	FileUtils.mkdir("sm")
+	FileUtils.touch("sm/.backup_ignore")
+end
+if (!File.exists?("smfb")) then
+	FileUtils.mkdir("smfb")
+	FileUtils.touch("smfb/.backup_ignore")
+end
+
+queue = Queue.new
+threads = []
+
+# add work to the queue
+File.open("comments").each{|line| queue << line }
+
+8.times do
+  threads << Thread.new do
+    # loop until there are no more things to do
+    until queue.empty?
+      # pop with the non-blocking flag set, this raises
+      # an exception if the queue is empty, in which case
+      # work_unit will be set to nil
+      line = queue.pop(true) rescue nil
+      if line
+	ss = line.chomp.split(/\|/)
+	filename = ss[0]
+	img = Magick::Image::read(filename).first
+	GC.start
+	w = img.columns
+	h = img.rows
+	smw = smfbw = w
+	smh = smfbh = h
+	if (w > h) then
+		smw = maxdim
+		smh = (smw.to_f/w * h).round
+
+		if (smh < mindimother) then
+			smh = mindimother
+			smw = (smh.to_f/h * w).round
+		end
+
+		smfbw = maxdimfb
+		smfbh = (smfbw.to_f/w * h).round
+	else
+		smh = maxdim
+		smw = (smh.to_f/h * w).round
+
+		if (smw < mindimother) then
+			smw = mindimother
+			smh = (smw.to_f/w * h).round
+		end
+
+		smfbh = maxdimfb
+		smfbw = (smfbh.to_f/h * w).round	
+	end
+
+	puts "#{filename}: #{w}x#{h} (sm: #{smw}x#{smh}) (smfb: #{smfbw}x#{smfbh})"
+
+	img.resize(smw, smh).write("sm/#{filename}"){ self.quality = 95 }
+
+	img.resize(smfbw, smfbh).write("smfb/#{filename}"){ self.quality = 95 }
+      end
+    end
+    # when there is no more work, the thread will stop
+  end
+end
+
+# wait until all threads have completed processing
+threads.each { |t| t.join }
+
+#mkdir sm
+# Normal images: 2048x2048
+#ls *.JPG | xargs -I{} convert -resize 2048x2048 -quality 95 {} sm/{} &
+# Others: Minimum 2048 on one axis
+#ls *.jpg | xargs -I{} convert -resize 2048x2048^ -quality 95 {} sm/{} &
+
+#mkdir smfb
+#ls *.jpg *.JPG | xargs -I{} convert -resize 960x960^ -quality 95 {} smfb/{} &
+
+

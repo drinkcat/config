@@ -1,0 +1,114 @@
+#!/usr/bin/ruby
+
+album = ARGV[0]
+nocreate = !!ARGV[1]
+
+## Picasa
+
+if (!album) then
+	puts "No album in parameter."
+	exit 1
+end
+
+if (!nocreate) then
+	puts "Creating Picasa album..."
+
+	system("google picasa create \"#{album}\"") 
+end
+
+out = File.open("list", "w")
+File.open("comments").each{|line|
+	ss = line.chomp.split(/\|/)
+	ss[1] = "" if (!ss[1])
+	comment = ss[1].strip
+	comment.gsub!('"', "\\\"")
+	comment.gsub!(/\!FB/, "")
+	comment = "" if (comment == "N/A")
+	out.puts "google picasa post \"#{album}\" #{ss[0]} --summary \"#{comment}\""
+}
+out.close
+
+## Facebook
+
+fbid = -1
+if (!nocreate) then
+	puts "Creating FB album..."
+
+	fbid = `fbcmd ADDALBUM \"#{album}\"`
+else
+	allid = `fbcmd -paid ALBUMS 2>/dev/null`.split(/\n/)
+
+	caid = -1
+	cname = -1
+	csize = -1
+	allid.each{|k|
+		next if (!k.match(/^\[\#\]/))
+
+#		puts k
+		caid = k.index("AID")
+		cname = k.index(" NAME")+1
+		csize = k.index("SIZE")
+	}
+
+#	puts "#{caid};#{cname};#{csize}"
+
+	allid.each{|k|
+		sname = k[cname..(csize-1)]
+		if (sname.match(/#{album} */)) then
+			puts k
+			fbid = k[caid..(cname-1)]
+		end
+	}
+end
+
+puts fbid
+
+f = File.open("fblist", "w")
+File.open("comments").each do |line|
+	ss = line.chomp.split(/\|/)
+	ss[1] = "" if (!ss[1])
+	#puts ss.inspect
+	filename = ss[0]
+	comment = ss[1].strip
+	ignore = comment.match(/!FB/) ? "#" : ""
+	comment.gsub!('"', "\\\"")
+	comment = "" if (comment == "N/A")
+	f.puts "#{ignore}fbcmdretry ADDPIC #{filename} #{fbid} \"#{comment}\""
+end
+f.close
+
+## Flickr
+
+puts "Flick UNTESTED, test it!"
+
+out = File.open("flickerlist", "w")
+firstflid = true
+File.open("comments").each{|line|
+	ss = line.chomp.split(/\|/)
+	ss[1] = "" if (!ss[1])
+	comment = ss[1].strip
+	comment.gsub!('"', "\\\"")
+	comment.gsub!(/\!FB/, "")
+	comment = "" if (comment == "N/A")
+    out.puts "flickcurl upload #{ss[0]} title \"#{comment}\" | sed -n 's/.*Photo ID: //p' > #{ss[0]}.flid"
+
+    if (firstflid) then
+        out.puts "flickcurl photosets.create \"#{album}\" \"\" `cat #{ss[0]}.flid` \
+| sed -e 's/.*Photoset \\([0-9]*\\) created.*/\\1/' > photoset.flid"
+    else
+        out.puts "flickcurl photosets.addPhoto `cat photoset.flid` `cat #{ss[0]}.flid`"
+    end
+    firstflid = false
+}
+
+out.close
+
+out = File.open("cmd", "w")
+
+out.puts 'bash -c "cd sm; bash ../list" &'
+out.puts 'bash -c "cd smfb; bash ../fblist" &'
+out.puts 'bash -c "bash flickerlist" &'
+
+out.close
+
+puts 'bash cmd'

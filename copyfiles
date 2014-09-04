@@ -7,3 +7,4 @@ cp -a ~/.emacs* .
 mkdir -p darktable-styles
 cp -a ~/.config/darktable/styles/* darktable-styles
 cp -a ~/bin .
+cp -a ~/.bashrc .

@@ -20,7 +20,8 @@ pulseaudio --start
 
 conky &
 
+xautolock -time 5 -locker 'i3lock -c 000080' &
 
-pigdin &
+pidgin &
 
 exec i3

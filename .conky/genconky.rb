@@ -106,11 +106,27 @@ add(offset, [
 	"${color #98c2c7}${execpi 2 ~/.conky/bat power }$color"
 ]);
 
+offset += 100
+
 #FIXME: Weather
+
+locs = [
+        [ "Singapore", "Singapore" ],
+        [ "Fribourg", "Europe/Zurich" ],
+        [ "MTV", "America/Los_Angeles" ] ]
+
+
+locs.each do |loc|
+  add(offset, [
+               "${color #ffcb48}#{loc[0]}$color",
+               "${color #98c2c7}${tztime #{loc[1]} %H:%M}$color"
+              ]);
+  offset += 200
+end
 
 #FIXME: Mail notification
 
-add(1000, [" "," "])
+add(1500, [" "," "])
 
 f = File.open(".conkyrc", "w")
 
@@ -132,7 +148,7 @@ border_inner_margin 0
 border_outer_margin 0
 #use_spacer left
 minimum_size 3000 62
-maximum_width 2000
+maximum_width 3000
 border_width 0
 TEXT
 END

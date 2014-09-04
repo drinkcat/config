@@ -127,7 +127,7 @@ bar {
 #	i3bar_command /usr/bin/i3bar-icons
 #        status_command ~/bin/i3status
         status_command i3status
-	font pango:DejaVu Sans Mono 9.5
+	font pango:DejaVu Sans Mono 9
         colors {
                 urgent_workspace   #2f343a #900000 #ffffff
         }
@@ -158,4 +158,3 @@ bindsym $mod+z [class="MPlayer"] move workspace current
 client.urgent #2f343a #900000 #ffffff #900000
 
 bindsym $mod+p exec /home/nicolas/bin/scale
-

@@ -47,7 +47,7 @@
             (let ((filename (buffer-file-name)))
               ;; Enable kernel mode for the appropriate files
               (when (and filename
-                         (string-match (expand-file-name "~/dev/gsoc")
+                         (string-match (expand-file-name "~/dev/chromebook/cras")
                                        filename))
                 (setq indent-tabs-mode t)
                 (c-set-style "linux-tabs-only")))))

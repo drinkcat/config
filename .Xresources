@@ -5,6 +5,9 @@ URxvt.font: xft:DejaVu Sans Mono:size=8.5
 Xcursor.size: 64
 URxvt*urgentOnBell:       true
 URxvt*termName: rxvt-256color
+URxvt.perl-ext-common: default,matcher,selection-to-clipboard
+URxvt.url-launcher: /usr/bin/xdg-open
+URxvt.matcher.button: 1
 
 ! Solarized color scheme for the X Window System
 !

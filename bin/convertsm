@@ -34,6 +34,7 @@ File.open("comments").each{|line| queue << line }
       line = queue.pop(true) rescue nil
       if line
 	ss = line.chomp.split(/\|/)
+        next if (!ss || !ss[0])
 	filename = ss[0]
 	img = Magick::Image::read(filename).first
 	GC.start
